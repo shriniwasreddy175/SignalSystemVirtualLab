@@ -1,8 +1,8 @@
-function Sidebar({ page, setPage }) {
+function Sidebar({ page, setPage, menuOpen, setMenuOpen }) {
 
   return (
 
-    <aside className="sidebar">
+    <aside className={`sidebar ${menuOpen ? "mobile-open" : ""}`}>
 
       <div className="sidebar-title">
         Virtual Lab
@@ -17,7 +17,10 @@ function Sidebar({ page, setPage }) {
               ? "active"
               : ""
           }
-          onClick={() => setPage("home")}
+          onClick={() => {
+            setPage("home");
+            setMenuOpen(false);
+          }}
         >
           🏠 Home
         </li>
@@ -29,7 +32,10 @@ function Sidebar({ page, setPage }) {
               ? "active"
               : ""
           }
-          onClick={() => setPage("generator")}
+          onClick={() => {
+            setPage("generator");
+            setMenuOpen(false);
+          }}
         >
           📈 Signal Generator
         </li>
@@ -40,7 +46,10 @@ function Sidebar({ page, setPage }) {
               ? "active"
               : ""
           }
-          onClick={() => setPage("operations")}
+          onClick={() => {
+            setPage("operations");
+            setMenuOpen(false);
+          }}
         >
           🔄 Signal Operations
         </li>
@@ -52,7 +61,10 @@ function Sidebar({ page, setPage }) {
               ? "active"
               : ""
           }
-          onClick={() => setPage("analysis")}
+          onClick={() => {
+            setPage("analysis");
+            setMenuOpen(false);
+          }}
         >
           📊 Analysis
         </li>

@@ -12,19 +12,25 @@ function App() {
 
   const [page, setPage] =
     useState("home");
+  const [menuOpen, setMenuOpen] = useState(false);
 
 
   return (
 
     <div className="app">
 
-      <Navbar />
+      <Navbar
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+      />
 
       <div className="main-layout">
 
         <Sidebar
           page={page}
           setPage={setPage}
+          menuOpen={menuOpen}
+          setMenuOpen={setMenuOpen}
         />
 
         <main className="content">

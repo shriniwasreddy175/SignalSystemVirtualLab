@@ -8,6 +8,22 @@ body {
   font-family: Arial, sans-serif;
   background: #f5f7fa;
   color: #1f2937;
+  overflow-x: hidden;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 /* Navbar */
@@ -23,6 +39,17 @@ body {
   padding: 0 25px;
 
   gap: 20px;
+}
+
+.navbar-menu-button {
+  display: none;
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
 }
 
 .navbar-logo {
@@ -131,16 +158,121 @@ body {
 
 /* Responsive */
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
+  .navbar-menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .main-layout {
+    display: block;
+  }
 
   .sidebar {
-    width: 180px;
+    position: fixed;
+    top: 65px;
+    left: 0;
+    width: min(280px, 80vw);
+    height: calc(100vh - 65px);
+    padding: 18px 16px;
+    transform: translateX(-110%);
+    transition: transform 0.25s ease;
+    z-index: 30;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.18);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-menu {
+    display: block;
+  }
+
+  .sidebar-menu li {
+    margin-bottom: 0;
+    text-align: left;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .content {
+    padding: 22px 16px 32px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    min-height: 70px;
+    height: auto;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .navbar-logo {
+    font-size: 18px;
+  }
+
+  .navbar-subtitle {
+    font-size: 12px;
+  }
+
+  .sidebar-menu {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar-menu li {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content {
+    padding: 18px 14px 28px;
+  }
+
+  .home h1 {
+    font-size: clamp(1.8rem, 7vw, 2.4rem);
   }
 
   .cards {
     grid-template-columns: 1fr;
   }
 
+  .card,
+  .controls,
+  .operation-controls,
+  .graph-card,
+  .formula-card,
+  .signal-input-card {
+    padding: 18px;
+  }
+
+  .analysis-panel-header,
+  .wave-panel-header,
+  .graph-title {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .control-group select,
+  .control-group input[type="range"] {
+    min-height: 44px;
+  }
+
+  .project-info,
+  .learning-section,
+  .college-info {
+    padding: 18px 16px;
+  }
 }
 
 /* Signal Generator */
