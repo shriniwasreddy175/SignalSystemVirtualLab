@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import SignalGenerator from "./pages/SignalGenerator";
 import SignalOperations from "./pages/SignalOperations";
 import Analysis from "./pages/Analysis";
+import EMGAnalyzer from "./pages/EMGAnalyzer";
 
 function App() {
 
@@ -49,6 +50,10 @@ function App() {
 
           {page === "analysis" && (
             <Analysis />
+          )}
+
+          {page === "emg" && (
+            <EMGAnalyzer />
           )}
 
         </main>
