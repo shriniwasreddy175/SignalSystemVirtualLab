@@ -25,7 +25,8 @@ function WaveChart({ title, values, color, sampleRate }) {
 }
 
 function SpectrumChart({ title, bins, sampleRate, color }) {
-  const W=800,H=230,L=54,R=16,T=16,B=38,pw=W-L-R,ph=H-T-B;
+  // Extra bottom space keeps frequency tick labels separate from the axis title.
+  const W=800,H=260,L=54,R=16,T=16,B=52,pw=W-L-R,ph=H-T-B;
   const maxHz=Math.min(10000,sampleRate/2);
   const visible=bins.filter(b=>b.hz<=maxHz);
   const max=Math.max(-90,...visible.map(b=>b.db));
@@ -35,10 +36,10 @@ function SpectrumChart({ title, bins, sampleRate, color }) {
     <div className="speech-chart-title"><h3>{title}</h3><span>FFT spectrum</span></div>
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={title}>
       {[0,1,2,3,4].map(i=><line key={i} x1={L} y1={T+i*ph/4} x2={W-R} y2={T+i*ph/4} className="speech-grid"/>)}
-      {[0,2000,4000,6000,8000,10000].filter(f=>f<=maxHz).map(f=><g key={f}><line x1={L+f/maxHz*pw} y1={T} x2={L+f/maxHz*pw} y2={H-B} className="speech-grid"/><text x={L+f/maxHz*pw} y={H-B+17} textAnchor="middle" className="speech-tick">{f}</text></g>)}
+      {[0,2000,4000,6000,8000,10000].filter(f=>f<=maxHz).map(f=><g key={f}><line x1={L+f/maxHz*pw} y1={T} x2={L+f/maxHz*pw} y2={H-B} className="speech-grid"/><text x={L+f/maxHz*pw} y={H-B+18} textAnchor="middle" className="speech-tick">{f}</text></g>)}
       <line x1={L} y1={H-B} x2={W-R} y2={H-B} className="speech-axis"/><line x1={L} y1={T} x2={L} y2={H-B} className="speech-axis"/>
       <polyline points={points} fill="none" stroke={color} strokeWidth="1.5"/>
-      <text x={W/2} y={H-6} textAnchor="middle" className="speech-axis-label">Frequency (Hz)</text>
+      <text x={W/2} y={H-8} textAnchor="middle" className="speech-axis-label">Frequency (Hz)</text>
     </svg>
   </section>;
 }
@@ -106,7 +107,10 @@ export default function SpeechAnalysis() {
     peak: vals.length ? Math.max(...vals.map(Math.abs)) : 0
   });
   const rm=calc(raw), fm=calc(filtered);
-  const fcFromR = 1/(2*Math.PI*10000*1e-6);
+  // Equivalent analog RC values for the selected cutoff, keeping R fixed at 10 kΩ.
+  const modelR = 10000;
+  const modelC = 1/(2*Math.PI*modelR*cutoff);
+  const modelCnf = modelC*1e9;
   const peakHz = bins => {
     if(!bins.length) return "—";
     const usable=bins.filter(b=>b.hz>0 && b.hz<Math.min(10000,sampleRate/2));
@@ -133,7 +137,7 @@ export default function SpeechAnalysis() {
       <section className="speech-panel">
         <div className="speech-heading"><span>02</span><div><h2>Laplace-domain filter model</h2><p>Explore the RC low-pass cutoff.</p></div></div>
         <label className="speech-slider"><span><b>Cutoff frequency</b><output>{cutoff.toLocaleString()} Hz</output></span><input type="range" min="200" max="8000" step="100" value={cutoff} onChange={e=>setCutoff(Number(e.target.value))}/></label>
-        <div className="speech-equation"><b>H(s) = 1 / (1 + RCs)</b><span>For R = 10 kΩ and C = 1 µF, theoretical f<sub>c</sub> ≈ {fcFromR.toFixed(2)} Hz.</span><small>The browser's digital low-pass filter is a practical comparison, not an exact analog circuit.</small></div>
+        <div className="speech-equation"><b>H(s) = 1 / (1 + RCs)</b><span>Equivalent RC model: R = 10 kΩ, C ≈ {modelCnf.toFixed(2)} nF, giving f<sub>c</sub> ≈ {cutoff.toLocaleString()} Hz.</span><small>The capacitor value is calculated from the selected cutoff. The browser uses a digital low-pass filter with the same target cutoff; it is a practical comparison, not an exact analog circuit.</small></div>
       </section>
     </div>
 
