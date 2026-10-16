@@ -83,6 +83,20 @@ function Sidebar({ page, setPage, menuOpen, setMenuOpen }) {
           🧠 EMG Analyzer
         </li>
 
+        <li
+          className={
+            page === "speech"
+              ? "active"
+              : ""
+          }
+          onClick={() => {
+            setPage("speech");
+            setMenuOpen(false);
+          }}
+        >
+          🗣️ Speech Analysis
+        </li>
+
       </ul>
 
     </aside>

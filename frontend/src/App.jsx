@@ -8,6 +8,7 @@ import SignalGenerator from "./pages/SignalGenerator";
 import SignalOperations from "./pages/SignalOperations";
 import Analysis from "./pages/Analysis";
 import EMGAnalyzer from "./pages/EMGAnalyzer";
+import SpeechAnalysis from "./pages/SpeechAnalysis";
 
 function App() {
 
@@ -54,6 +55,10 @@ function App() {
 
           {page === "emg" && (
             <EMGAnalyzer />
+          )}
+
+          {page === "speech" && (
+            <SpeechAnalysis />
           )}
 
         </main>
