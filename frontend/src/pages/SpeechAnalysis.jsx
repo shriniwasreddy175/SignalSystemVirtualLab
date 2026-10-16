@@ -29,9 +29,16 @@ function SpectrumChart({ title, bins, sampleRate, color }) {
   const W=800,H=260,L=54,R=16,T=16,B=52,pw=W-L-R,ph=H-T-B;
   const maxHz=Math.min(10000,sampleRate/2);
   const visible=bins.filter(b=>b.hz<=maxHz);
-  const max=Math.max(-90,...visible.map(b=>b.db));
-  const min=Math.min(-90,max-1);
-  const points=visible.map(b=>`${L+b.hz/maxHz*pw},${T+(max-b.db)/(max-min)*ph}`).join(" ");
+  // Keep the spectrum inside a fixed -100 dB to 0 dB range.
+  const max = 0;
+  const min = -100;
+  const points = visible.map(b => {
+  // Clamp each FFT value so it cannot draw outside the chart.
+    const db = Math.max(min, Math.min(max, b.db));
+    const x = L + (b.hz / maxHz) * pw;
+    const y = T + ((max - db) / (max - min)) * ph;
+    return `${x},${y}`;
+  }).join(" ");
   return <section className="speech-chart">
     <div className="speech-chart-title"><h3>{title}</h3><span>FFT spectrum</span></div>
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={title}>
